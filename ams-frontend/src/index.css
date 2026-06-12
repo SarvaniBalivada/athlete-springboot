@@ -1,0 +1,149 @@
+:root {
+  --text: #000080;
+  --text-h: #000080;
+  --bg: #ffffff;
+  --card-bg: #ffffff;
+  --border: #000080;
+  --accent: #000080;
+  --nav-active: #ffffff;
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  min-height: 100svh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--border);
+}
+
+.card-title {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.card-count {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.dashboard-heading {
+  color: var(--text);
+}
+
+.dashboard-heading:hover {
+  color: var(--accent);
+}
+
+.auth-card {
+  background-color: #ffffff;
+  color: var(--accent);
+  border-radius: 0.75rem;
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 128, 0.15);
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.auth-card h2,
+.auth-card label,
+.auth-card p {
+  color: var(--accent);
+}
+
+.auth-card .form-control {
+  background-color: #ffffff;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.auth-card .form-control::placeholder {
+  color: var(--accent);
+}
+
+.auth-card .invalid-feedback {
+  color: var(--accent);
+}
+
+.auth-card a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.navbar-brand {
+  color: var(--text);
+}
+
+.nav-link {
+  color: var(--text);
+}
+
+.nav-link.active {
+  background-color: var(--nav-active);
+  color: var(--text);
+}
+
+.btn-success {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-info {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+.footer{
+  width: 100%;
+  height:50px;
+  background-color: var(--card-bg);
+  color: var(--text);
+  text-align: center;
+  border-top: 1px solid var(--border);
+}
+
+.table {
+  color: var(--text);
+}
+
+.table th {
+  background-color: var(--accent);
+  color: #ffffff;
+}
+
+.table td {
+  color: var(--text);
+}
