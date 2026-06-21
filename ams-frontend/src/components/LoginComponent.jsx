@@ -49,9 +49,9 @@ const LoginComponent = () => {
 
         } catch (error) {
 
-            console.log("Login error:", error);
-
-            alert("Invalid Credentials");
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || error.message;
+            console.error("Login error:", error.response?.data || error.message);
+            alert("Login failed: " + errorMsg);
         }
     };
 

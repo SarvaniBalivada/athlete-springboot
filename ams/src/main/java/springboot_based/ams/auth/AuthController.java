@@ -1,9 +1,10 @@
 package springboot_based.ams.auth;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,32 +22,52 @@ import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin("*")
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private AuthenticationManager authenticationManager;
-    private JwtUtil jwtUtil;
-    private UserRepository userRepository;
-    private AthleteRepository athleteRepository;
-    private CoachRepository coachRepository;
-    private org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final AthleteRepository athleteRepository;
+    private final CoachRepository coachRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
+                          UserRepository userRepository, AthleteRepository athleteRepository,
+                          CoachRepository coachRepository, org.springframework.security.crypto.password.PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+        this.athleteRepository = athleteRepository;
+        this.coachRepository = coachRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtUtil.generateToken(userDetails.getUsername());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String token = jwtUtil.generateToken(userDetails.getUsername());
 
-        return ResponseEntity.ok(new LoginResponse(token, userDetails.getUsername(), "USER"));
+            return ResponseEntity.ok(new LoginResponse(token, userDetails.getUsername(), "USER"));
+        } catch (BadCredentialsException ex) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Invalid credentials");
+            return new ResponseEntity<>(new LoginResponse(null, null, null), HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return new ResponseEntity<>(new LoginResponse(null, null, null), HttpStatus.CONFLICT);
+        }
+
         User user = new User();
         user.setUsername(request.getEmail());
         user.setEmail(request.getEmail());

@@ -94,9 +94,9 @@ const RegistrationComponent = () => {
 
         } catch (error) {
 
-            console.log(error);
-
-            alert("Registration failed");
+            const errorMsg = error.response?.data?.error || error.response?.data?.message || error.message;
+            console.error("Registration error:", error.response?.data || error.message);
+            alert("Registration failed: " + errorMsg);
         }
     };
 
