@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContextProvider";
-import axios from "axios";
+import { authenticateUser } from "../services/AuthService";
 
 const LoginComponent = () => {
 
@@ -28,33 +28,20 @@ const LoginComponent = () => {
 
         try {
 
-            const response = await axios.post(
-                "http://localhost:8080/auth/login",
-                {
-                    email,
-                    password
-                }
-            );
+            const response = await authenticateUser({
+                username: email,
+                password
+            });
 
             const token = response.data.token;
-
-            let userRole = null;
-            let userInfo = null;
-            try {
-                const profileResponse = await axios.get("http://localhost:8080/api/users/profile", {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                userRole = profileResponse.data.role;
-                userInfo = {
-                    id: profileResponse.data.id,
-                    firstName: profileResponse.data.firstName,
-                    lastName: profileResponse.data.lastName,
-                    email: profileResponse.data.email,
-                    role: userRole
-                };
-            } catch (profileError) {
-                console.warn("Could not fetch role from profile", profileError);
-            }
+            const userRole = response.data.role || "USER";
+            const userInfo = {
+                id: null,
+                firstName: "",
+                lastName: "",
+                email: email,
+                role: userRole
+            };
 
             login(token, userRole, userInfo);
 
@@ -62,7 +49,7 @@ const LoginComponent = () => {
 
         } catch (error) {
 
-            console.log(error);
+            console.log("Login error:", error);
 
             alert("Invalid Credentials");
         }

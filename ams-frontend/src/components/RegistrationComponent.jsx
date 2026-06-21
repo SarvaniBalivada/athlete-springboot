@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContextProvider";
-import axios from "axios";
+import { registerUser } from "../services/AuthService";
 
 const RegistrationComponent = () => {
 
@@ -81,16 +81,13 @@ const RegistrationComponent = () => {
 
         try {
 
-            const response = await axios.post(
-                "http://localhost:8080/api/users/register",
-                {
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    role
-                }
-            );
+            const response = await registerUser({
+                firstName,
+                lastName,
+                email,
+                password,
+                role
+            });
 
             login(response.data.token);
             navigate("/dashboard");
