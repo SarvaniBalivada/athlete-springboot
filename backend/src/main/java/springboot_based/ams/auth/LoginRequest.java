@@ -1,1 +1,9 @@
-package springboot_based.ams.auth;import lombok.Data;@Datapublic class LoginRequest {    private String username;    private String password;}
+package springboot_based.ams.auth;
+
+import lombok.Data;
+
+@Data
+public class LoginRequest {
+    private String username;
+    private String password;
+}

@@ -1,1 +1,12 @@
-package springboot_based.ams.repository;import org.springframework.data.jpa.repository.JpaRepository;import springboot_based.ams.entity.User;import java.util.Optional;public interface UserRepository extends JpaRepository<User, Long> {    Optional<User> findByUsername(String username);    boolean existsByEmail(String email);    Optional<User> findByEmail(String email);}
+package springboot_based.ams.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import springboot_based.ams.entity.User;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
+    boolean existsByEmail(String email);
+    Optional<User> findByEmail(String email);
+}

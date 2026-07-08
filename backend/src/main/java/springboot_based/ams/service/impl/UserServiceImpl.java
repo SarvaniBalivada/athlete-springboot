@@ -1,1 +1,63 @@
-package springboot_based.ams.service.impl;import lombok.AllArgsConstructor;import org.springframework.stereotype.Service;import springboot_based.ams.dto.UserDto;import springboot_based.ams.entity.User;import springboot_based.ams.exception.ResourceNotFoundException;import springboot_based.ams.mapper.UserMapper;import springboot_based.ams.repository.UserRepository;import springboot_based.ams.service.UserService;import java.util.List;import java.util.stream.Collectors;@Service@AllArgsConstructorpublic class UserServiceImpl implements UserService {    private UserRepository userRepository;    @Override    public UserDto createUser(UserDto userDto) {        User user = UserMapper.mapToUser(userDto);        User savedUser = userRepository.save(user);        return UserMapper.mapToUserDto(savedUser);    }    @Override    public UserDto getUserById(Long userId) {        User user = userRepository.findById(userId)                .orElseThrow(() ->                        new ResourceNotFoundException("User is not exists given id: " + userId));        return UserMapper.mapToUserDto(user);    }    @Override    public List<UserDto> getAllUsers() {        List<User> users = userRepository.findAll();        return users.stream().map((user) -> UserMapper.mapToUserDto(user))                .collect(Collectors.toList());    }    @Override    public UserDto updateUser(Long userId, UserDto updatedUser) {        User user = userRepository.findById(userId)                .orElseThrow(() -> new ResourceNotFoundException("User is not exists given id: " + userId));        user.setUsername(updatedUser.getUsername());        user.setEmail(updatedUser.getEmail());        user.setPassword(updatedUser.getPassword());        User updatedUserObj = userRepository.save(user);        return UserMapper.mapToUserDto(updatedUserObj);    }    @Override    public void deleteUser(Long userId) {        User user = userRepository.findById(userId)                .orElseThrow(() -> new ResourceNotFoundException("User is not exists given id: " + userId));        userRepository.deleteById(userId);    }}
+package springboot_based.ams.service.impl;
+
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import springboot_based.ams.dto.UserDto;
+import springboot_based.ams.entity.User;
+import springboot_based.ams.exception.ResourceNotFoundException;
+import springboot_based.ams.mapper.UserMapper;
+import springboot_based.ams.repository.UserRepository;
+import springboot_based.ams.service.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@AllArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private UserRepository userRepository;
+
+    @Override
+    public UserDto createUser(UserDto userDto) {
+        User user = UserMapper.mapToUser(userDto);
+        User savedUser = userRepository.save(user);
+        return UserMapper.mapToUserDto(savedUser);
+    }
+
+    @Override
+    public UserDto getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User is not exists given id: " + userId));
+        return UserMapper.mapToUserDto(user);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream().map((user) -> UserMapper.mapToUserDto(user))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto updateUser(Long userId, UserDto updatedUser) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User is not exists given id: " + userId));
+
+        user.setUsername(updatedUser.getUsername());
+        user.setEmail(updatedUser.getEmail());
+        user.setPassword(updatedUser.getPassword());
+
+        User updatedUserObj = userRepository.save(user);
+
+        return UserMapper.mapToUserDto(updatedUserObj);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User is not exists given id: " + userId));
+        userRepository.deleteById(userId);
+    }
+}
