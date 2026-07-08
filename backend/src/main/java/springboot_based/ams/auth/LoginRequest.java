@@ -1,0 +1,1 @@
+package springboot_based.ams.auth;import lombok.Data;@Datapublic class LoginRequest {    private String username;    private String password;}
